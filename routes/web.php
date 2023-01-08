@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InventoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::prefix('inventory')->controller(InventoryController::class)->group(function () {
+    Route::get('', 'index')->name('inventory.index');
+    Route::post('', 'store')->name('inventory.store');
+    Route::get('{inventory}', 'show')->name('inventory.show');
+    Route::put('{inventory}', 'update')->name('inventory.update');
+    Route::delete('{inventory}', 'destroy')->name('inventory.destroy');
 });
