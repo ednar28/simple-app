@@ -4,5 +4,15 @@ namespace App\Enums;
 
 enum {{ class }}: string
 {
-   case ENUM_1 = 'enum1';
+    case ENUM_1 = 'enum1';
+
+    /**
+     * Get all order status payment
+     *
+     * @return array
+     */
+    public static function values(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
 }
