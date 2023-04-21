@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,13 +24,8 @@ class Inventory extends Model
 
     /**
      * Scope a query to sorting invetories.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $orderColumn;
-     * @param  string  $orderType;
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeRequestSort($query, string $orderColumn = null, $orderType = null)
+    public function scopeRequestSort(Builder $query, string $orderColumn = null, string $orderType = null): Builder
     {
         // default sort by name ascending
         $orderColumn = in_array($orderColumn, ['name', 'amount', 'price']) ? $orderColumn : 'name';

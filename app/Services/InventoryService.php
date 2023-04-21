@@ -9,10 +9,8 @@ class InventoryService
 {
     /**
      * Get list inventories
-     *
-     * @return \App\Http\Resources\ApiCollection
      */
-    public function getList()
+    public function getList(): ApiCollection
     {
         $inventories = Inventory::query()
             ->requestSort(request()->get('order_column'), request()->get('order_type'))
@@ -23,11 +21,8 @@ class InventoryService
 
     /**
      * Create a inventory.
-     *
-     * @param  array<string, int|string>  $data
-     * @return \App\Models\Inventory
      */
-    public function create(array $data)
+    public function create(array $data): Inventory
     {
         $inventory = new Inventory();
         $inventory->name = $data['name'];
@@ -41,12 +36,8 @@ class InventoryService
 
     /**
      * Update a inventory.
-     *
-     * @param  \App\Models\Inventory  $inventory
-     * @param  array<string, int|string>  $data
-     * @return \App\Models\Inventory
      */
-    public function update(Inventory $inventory, array $data)
+    public function update(Inventory $inventory, array $data): Inventory
     {
         $inventory->name = $data['name'];
         $inventory->price = $data['price'];
@@ -60,15 +51,12 @@ class InventoryService
     /**
      * Soft delete a inventory
      *
-     * @param  \App\Models\Inventory  $inventory
-     * @return array<string, \Carbon\Carbon>
+     * @return array<string, \Carbon\Carbon|int>
      */
-    public function delete(Inventory $inventory)
+    public function delete(Inventory $inventory): array
     {
         $inventory->delete();
 
-        return [
-            'deleted_at' => $inventory->deleted_at,
-        ];
+        return $inventory->only(['id', 'deleted_at']);
     }
 }

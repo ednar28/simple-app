@@ -5,6 +5,7 @@ namespace Tests;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Testing\TestResponse;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -13,10 +14,13 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * String date for testing now.
-     *
-     * @var string
      */
-    private string $now = '2023-01-08 00:00:00';
+    private string $now = '2023-09-06 00:00:00';
+
+    /**
+     * The URI request.
+     */
+    protected string $url = '';
 
     /**
      * Setup environment testing.
@@ -43,15 +47,51 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * Visit the given URI with a GET request, expecting a JSON response.
-     *
-     * @param  string  $uri
-     * @param  array  $data
-     * @param  array  $headers
-     * @return \Illuminate\Testing\TestResponse
+     * GET request, expecting a JSON response.
      */
-    public function getJsonCustom($uri, array $data, array $headers = [])
+    public function customGetJson(string $prefix = '', array $data = [], array $headers = []): TestResponse
     {
-        return $this->json('GET', $uri, $data, $headers);
+        return $this->json(
+            method: 'GET',
+            uri: $this->url . "/$prefix",
+            data: $data,
+            headers: $headers,
+        );
+    }
+
+    /**
+     * POST request, expecting a JSON response.
+     */
+    public function customPostJson(array $data = [], $headers = []): TestResponse
+    {
+        return $this->postJson(
+            uri: $this->url,
+            data: $data,
+            headers: $headers,
+        );
+    }
+
+     /**
+     * PUT request, expecting a JSON response.
+     */
+    public function customPutJson(array $data = [], string $prefix = '', $headers = []): TestResponse
+    {
+        return $this->putJson(
+            uri: $this->url . "/$prefix",
+            data: $data,
+            headers: $headers,
+        );
+    }
+
+     /**
+     * DELETE request, expecting a JSON response.
+     */
+    public function customDeleteJson(string $prefix = '', array $data = [], $headers = []): TestResponse
+    {
+        return $this->deleteJson(
+            uri: $this->url . "/$prefix",
+            data: $data,
+            headers: $headers,
+        );
     }
 }

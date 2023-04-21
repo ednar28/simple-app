@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\InventoryRequest;
+use App\Http\Resources\ApiCollection;
 use App\Models\Inventory;
 use App\Services\InventoryService;
 
@@ -17,21 +18,16 @@ class InventoryController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \App\Http\Resources\ApiCollection
      */
-    public function index()
+    public function index(): ApiCollection
     {
         return $this->inventoryService->getList();
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\InventoryRequest  $request
-     * @return \App\Models\Inventory
      */
-    public function store(InventoryRequest $request)
+    public function store(InventoryRequest $request): Inventory
     {
         $validated = $request->validated();
 
@@ -40,12 +36,8 @@ class InventoryController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\InventoryRequest  $request
-     * @param  \App\Models\Inventory  $inventory
-     * @return \App\Models\Inventory
      */
-    public function update(InventoryRequest $request, Inventory $inventory)
+    public function update(InventoryRequest $request, Inventory $inventory): Inventory
     {
         $validated = $request->validated();
 
@@ -55,10 +47,9 @@ class InventoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Inventory  $inventory
-     * @return array<string, \Carbon\Carbon>
+     * @return array<string, \Carbon\Carbon|int>
      */
-    public function destroy(Inventory $inventory)
+    public function destroy(Inventory $inventory): array
     {
         return $this->inventoryService->delete($inventory);
     }
