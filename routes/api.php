@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\UserSalesmanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('inventory')
+        ->controller(InventoryController::class)
+        ->group(function () {
+            Route::get('', 'index')->name('inventory.index');
+            Route::post('', 'store')->name('inventory.store');
+            Route::get('{inventory}', 'show')->name('inventory.show');
+            Route::put('{inventory}', 'update')->name('inventory.update');
+            Route::delete('{inventory}', 'destroy')->name('inventory.destroy');
+        });
 
     Route::prefix('user-salesman')
         ->controller(UserSalesmanController::class)

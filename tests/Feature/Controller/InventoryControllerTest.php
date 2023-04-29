@@ -26,7 +26,7 @@ class InventoryControllerTest extends TestCaseController
     {
         $inventory = Inventory::factory()->create();
 
-        $this->customGetJson()->assertOk()->assertJson(fn (AssertableJson $json) => $json
+        $this->getJsonSuccess()->assertJson(fn (AssertableJson $json) => $json
             ->has('data', 1, fn (AssertableJson $json) => $json
                 ->where('id', $inventory->id)
                 ->where('name', $inventory->name)
@@ -42,7 +42,7 @@ class InventoryControllerTest extends TestCaseController
                 ->where('current_page', 1)
                 ->where('to', 1)
                 ->where('total', 1)
-                ->where('per_page', 15)
+                ->where('per_page', 50)
                 ->etc()
             )
         );
@@ -60,7 +60,7 @@ class InventoryControllerTest extends TestCaseController
         )->create();
 
         // default should order by name ascending
-        $this->customGetJson()->assertOk()->assertJson(fn (AssertableJson $json) => $json
+        $this->getJsonSuccess()->assertJson(fn (AssertableJson $json) => $json
             ->has('data', 3)
             ->where('data.0.id', $inventories[0]->id)
             ->where('data.1.id', $inventories[1]->id)
@@ -69,7 +69,7 @@ class InventoryControllerTest extends TestCaseController
         );
 
         // order by name | descending
-        $this->customGetJson(data: ['order_column' => 'name', 'order_type' => 'desc'])->assertOk()
+        $this->getJsonSuccess(data: ['order_column' => 'name', 'order_type' => 'desc'])
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('data', 3)
                 ->where('data.0.id', $inventories[2]->id)
@@ -79,7 +79,7 @@ class InventoryControllerTest extends TestCaseController
             );
 
         // order by price | ascending
-        $this->customGetJson(data: ['order_column' => 'price'])->assertOk()
+        $this->getJsonSuccess(data: ['order_column' => 'price'])
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('data', 3)
                 ->where('data.0.id', $inventories[2]->id)
@@ -89,7 +89,7 @@ class InventoryControllerTest extends TestCaseController
             );
 
         // order by price | descending
-        $this->customGetJson(data: ['order_column' => 'price', 'order_type' => 'desc'])->assertOk()
+        $this->getJsonSuccess(data: ['order_column' => 'price', 'order_type' => 'desc'])
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('data', 3)
                 ->where('data.0.id', $inventories[0]->id)
@@ -99,7 +99,7 @@ class InventoryControllerTest extends TestCaseController
             );
 
         // order by amount | ascending
-        $this->customGetJson(data: ['order_column' => 'amount'])->assertOk()
+        $this->getJsonSuccess(data: ['order_column' => 'amount'])
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('data', 3)
                 ->where('data.0.id', $inventories[1]->id)
@@ -109,7 +109,7 @@ class InventoryControllerTest extends TestCaseController
             );
 
         // order by amount | descending
-        $this->customGetJson(data: ['order_column' => 'amount', 'order_type' => 'desc'])->assertOk()
+        $this->getJsonSuccess(data: ['order_column' => 'amount', 'order_type' => 'desc'])
             ->assertJson(fn (AssertableJson $json) => $json
                 ->has('data', 3)
                 ->where('data.0.id', $inventories[2]->id)
@@ -133,7 +133,7 @@ class InventoryControllerTest extends TestCaseController
             'unit' => Units::DOZEN->value,
         ];
 
-        $response = $this->customPostJson($form)->assertCreated();
+        $response = $this->postJsonSuccess($form);
         $inventory = Inventory::orderByDesc('id')->first();
         $response->assertJson(fn (AssertableJson $json) => $json
             ->where('id', $inventory->id)
@@ -173,7 +173,7 @@ class InventoryControllerTest extends TestCaseController
         ];
 
         $this->travel(2)->days();
-        $this->customPutJson($form, $inventory->id)->assertOk()
+        $this->putJsonSuccess($form, $inventory->id)
             ->assertJson(fn (AssertableJson $json) => $json
                 ->where('id', $inventory->id)
                 ->where('name', $form['name'])
@@ -205,7 +205,7 @@ class InventoryControllerTest extends TestCaseController
     {
         $inventory = Inventory::factory()->create();
 
-        $this->customDeleteJson($inventory->id)->assertOk()->assertJson(fn (AssertableJson $json) => $json
+        $this->deleteJsonSuccess($inventory->id)->assertJson(fn (AssertableJson $json) => $json
             ->where('id', $inventory->id)
             ->where('deleted_at', now()->toJSON())
         );

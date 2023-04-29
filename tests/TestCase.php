@@ -24,8 +24,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Setup environment testing.
-     *
-     * @return void
      */
     public function setUp(): void
     {
@@ -36,8 +34,6 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Clean up the testing environment before the next test.
-     *
-     * @return void
      */
     public function tearDown(): void
     {
@@ -49,49 +45,78 @@ abstract class TestCase extends BaseTestCase
     /**
      * GET request, expecting a JSON response.
      */
-    public function customGetJson(string $prefix = '', array $data = [], array $headers = []): TestResponse
+    protected function getJsonSuccess(string $prefix = '', array $data = [], array $headers = []): TestResponse
     {
         return $this->json(
             method: 'GET',
             uri: $this->url . "/$prefix",
             data: $data,
             headers: $headers,
-        );
+        )->assertSuccessful();
     }
 
     /**
      * POST request, expecting a JSON response.
      */
-    public function customPostJson(array $data = [], $headers = []): TestResponse
+    protected function postJsonSuccess(array $data = [], $headers = []): TestResponse
     {
         return $this->postJson(
             uri: $this->url,
             data: $data,
             headers: $headers,
-        );
+        )->assertSuccessful();
+    }
+
+    /**
+     * POST request, expecting a JSON response.
+     * when status 422 <validation errors>
+     */
+    protected function postJsonValidationErrors(
+        array $data = [],
+        array $messages = [],
+        array $headers = []
+    ): TestResponse {
+        return $this->postJson(uri: $this->url, data: $data, headers: $headers)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors($messages);
     }
 
      /**
      * PUT request, expecting a JSON response.
      */
-    public function customPutJson(array $data = [], string $prefix = '', $headers = []): TestResponse
+    protected function putJsonSuccess(array $data = [], string $prefix = '', array $headers = []): TestResponse
     {
         return $this->putJson(
             uri: $this->url . "/$prefix",
             data: $data,
             headers: $headers,
-        );
+        )->assertSuccessful();
+    }
+
+     /**
+     * PUT request, expecting a JSON response.
+     * when status 422 <validation errors>
+     */
+    protected function putJsonValidationErrors(
+        array $data = [],
+        string $prefix = '',
+        array $messages = [],
+        array $headers = []
+    ): TestResponse {
+        return $this->putJson(uri: $this->url . "/$prefix", data: $data, headers: $headers)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors($messages);
     }
 
      /**
      * DELETE request, expecting a JSON response.
      */
-    public function customDeleteJson(string $prefix = '', array $data = [], $headers = []): TestResponse
+    protected function deleteJsonSuccess(string $prefix = '', array $data = [], $headers = []): TestResponse
     {
         return $this->deleteJson(
             uri: $this->url . "/$prefix",
             data: $data,
             headers: $headers,
-        );
+        )->assertSuccessful();
     }
 }

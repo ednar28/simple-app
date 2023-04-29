@@ -19,6 +19,8 @@ class InventoryRequestTest extends TestCaseController
         parent::setUp();
 
         $this->inventory = Inventory::factory()->create();
+
+        $this->url = route('inventory.index');
     }
 
     /**
@@ -30,20 +32,18 @@ class InventoryRequestTest extends TestCaseController
     {
         $form = [];
 
-        $url = route('inventory.store');
-        $this->postJson($url, $form)->assertJsonValidationErrors([
-            'name' => 'The name field is required.',
-            'price' => 'The price field is required.',
-            'amount' => 'The amount field is required.',
-            'unit' => 'The unit field is required.',
+        $this->postJsonValidationErrors($form, [
+            'name' => __('validation.required', ['attribute' => 'name']),
+            'price' => __('validation.required', ['attribute' => 'price']),
+            'amount' => __('validation.required', ['attribute' => 'amount']),
+            'unit' => __('validation.required', ['attribute' => 'unit']),
         ]);
 
-        $url = route('inventory.update', ['inventory' => $this->inventory]);
-        $this->putJson($url, $form)->assertJsonValidationErrors([
-            'name' => 'The name field is required.',
-            'price' => 'The price field is required.',
-            'amount' => 'The amount field is required.',
-            'unit' => 'The unit field is required.',
+        $this->putJsonValidationErrors($form, $this->inventory->id, [
+            'name' => __('validation.required', ['attribute' => 'name']),
+            'price' => __('validation.required', ['attribute' => 'price']),
+            'amount' => __('validation.required', ['attribute' => 'amount']),
+            'unit' => __('validation.required', ['attribute' => 'unit']),
         ]);
     }
 
@@ -58,14 +58,12 @@ class InventoryRequestTest extends TestCaseController
             'name' => ['key' => 'value'],
         ];
 
-        $url = route('inventory.store');
-        $this->postJson($url, $form)->assertJsonValidationErrors([
-            'name' => 'The name must be a string.',
+        $this->postJsonValidationErrors($form, [
+            'name' => __('validation.string', ['attribute' => 'name']),
         ]);
 
-        $url = route('inventory.update', ['inventory' => $this->inventory]);
-        $this->putJson($url, $form)->assertJsonValidationErrors([
-            'name' => 'The name must be a string.',
+        $this->putJsonValidationErrors($form, $this->inventory->id, [
+            'name' => __('validation.string', ['attribute' => 'name']),
         ]);
     }
 
@@ -81,14 +79,12 @@ class InventoryRequestTest extends TestCaseController
             'name' => $randomString,
         ];
 
-        $url = route('inventory.store');
-        $this->postJson($url, $form)->assertJsonValidationErrors([
-            'name' => 'The name must not be greater than 255 characters.',
+        $this->postJsonValidationErrors($form, [
+            'name' => __('validation.max.string', ['attribute' => 'name', 'max' => 255]),
         ]);
 
-        $url = route('inventory.update', ['inventory' => $this->inventory]);
-        $this->putJson($url, $form)->assertJsonValidationErrors([
-            'name' => 'The name must not be greater than 255 characters.',
+        $this->putJsonValidationErrors($form, $this->inventory->id, [
+            'name' => __('validation.max.string', ['attribute' => 'name', 'max' => 255]),
         ]);
     }
 
@@ -104,16 +100,14 @@ class InventoryRequestTest extends TestCaseController
             'amount' => 'some string',
         ];
 
-        $url = route('inventory.store');
-        $this->postJson($url, $form)->assertJsonValidationErrors([
-            'price' => 'The price must be an integer.',
-            'amount' => 'The amount must be an integer.',
+        $this->postJsonValidationErrors($form, [
+            'price' => __('validation.integer', ['attribute' => 'price']),
+            'amount' => __('validation.integer', ['attribute' => 'amount']),
         ]);
 
-        $url = route('inventory.update', ['inventory' => $this->inventory]);
-        $this->putJson($url, $form)->assertJsonValidationErrors([
-            'price' => 'The price must be an integer.',
-            'amount' => 'The amount must be an integer.',
+        $this->putJsonValidationErrors($form, $this->inventory->id, [
+            'price' => __('validation.integer', ['attribute' => 'price']),
+            'amount' => __('validation.integer', ['attribute' => 'amount']),
         ]);
     }
 
@@ -129,16 +123,14 @@ class InventoryRequestTest extends TestCaseController
             'amount' => -1,
         ];
 
-        $url = route('inventory.store');
-        $this->postJson($url, $form)->assertJsonValidationErrors([
-            'price' => 'The price must be at least 0.',
-            'amount' => 'The amount must be at least 0.',
+        $this->postJsonValidationErrors($form, [
+            'price' => __('validation.min.numeric', ['attribute' => 'price', 'min' => 0]),
+            'amount' => __('validation.min.numeric', ['attribute' => 'amount', 'min' => 0]),
         ]);
 
-        $url = route('inventory.update', ['inventory' => $this->inventory]);
-        $this->putJson($url, $form)->assertJsonValidationErrors([
-            'price' => 'The price must be at least 0.',
-            'amount' => 'The amount must be at least 0.',
+        $this->putJsonValidationErrors($form, $this->inventory->id, [
+            'price' => __('validation.min.numeric', ['attribute' => 'price', 'min' => 0]),
+            'amount' => __('validation.min.numeric', ['attribute' => 'amount', 'min' => 0]),
         ]);
     }
 
@@ -154,16 +146,14 @@ class InventoryRequestTest extends TestCaseController
             'amount' => 999_999_999,
         ];
 
-        $url = route('inventory.store');
-        $this->postJson($url, $form)->assertJsonValidationErrors([
-            'price' => 'The price must not be greater than 100000000.',
-            'amount' => 'The amount must not be greater than 100000000.',
+        $this->postJsonValidationErrors($form, [
+            'price' => __('validation.max.numeric', ['attribute' => 'price', 'max' => '100000000']),
+            'amount' => __('validation.max.numeric', ['attribute' => 'amount', 'max' => '100000000']),
         ]);
 
-        $url = route('inventory.update', ['inventory' => $this->inventory]);
-        $this->putJson($url, $form)->assertJsonValidationErrors([
-            'price' => 'The price must not be greater than 100000000.',
-            'amount' => 'The amount must not be greater than 100000000.',
+        $this->putJsonValidationErrors($form, $this->inventory->id, [
+            'price' => __('validation.max.numeric', ['attribute' => 'price', 'max' => '100000000']),
+            'amount' => __('validation.max.numeric', ['attribute' => 'amount', 'max' => '100000000']),
         ]);
     }
 
@@ -178,14 +168,12 @@ class InventoryRequestTest extends TestCaseController
             'unit' => 'some text',
         ];
 
-        $url = route('inventory.store');
-        $this->postJson($url, $form)->assertJsonValidationErrors([
-            'unit' => 'The selected unit is invalid.',
+        $this->postJsonValidationErrors($form, [
+            'unit' => __('validation.in', ['attribute' => 'unit']),
         ]);
 
-         $url = route('inventory.update', ['inventory' => $this->inventory]);
-        $this->putJson($url, $form)->assertJsonValidationErrors([
-            'unit' => 'The selected unit is invalid.',
+        $this->putJsonValidationErrors($form, $this->inventory->id, [
+            'unit' => __('validation.in', ['attribute' => 'unit']),
         ]);
     }
 }
