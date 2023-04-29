@@ -16,4 +16,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+
+    Route::prefix('user-salesman')
+        ->controller(UserSalesmanController::class)
+        ->group(function () {
+            Route::get('', 'index')->name('user.salesman.index');
+            Route::post('', 'store')->name('user.salesman.store');
+            Route::get('{user}', 'show')->name('user.salesman.show');
+            Route::put('{user}', 'update')->name('user.salesman.update');
+            Route::delete('{user}', 'destroy')->name('user.salesman.destroy');
+        });
 });

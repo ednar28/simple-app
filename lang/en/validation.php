@@ -174,6 +174,11 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'data.name' => 'name',
+        'data.email' => 'email',
+        'data.password' => 'password',
+        'salesman.code' => 'code',
+    ],
 
 ];
