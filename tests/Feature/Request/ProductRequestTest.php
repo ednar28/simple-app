@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Request;
 
-use App\Models\Inventory;
+use App\Models\Product;
 use Tests\TestCaseController;
 
-class InventoryRequestTest extends TestCaseController
+class ProductRequestTest extends TestCaseController
 {
-    private Inventory $inventory;
+    private Product $product;
 
     /**
      * Setup environment testing.
@@ -18,9 +18,9 @@ class InventoryRequestTest extends TestCaseController
     {
         parent::setUp();
 
-        $this->inventory = Inventory::factory()->create();
+        $this->product = Product::factory()->create();
 
-        $this->url = route('inventory.index');
+        $this->url = route('product.index');
     }
 
     /**
@@ -39,7 +39,7 @@ class InventoryRequestTest extends TestCaseController
             'unit' => __('validation.required', ['attribute' => 'unit']),
         ]);
 
-        $this->putJsonValidationErrors($form, $this->inventory->id, [
+        $this->putJsonValidationErrors($form, $this->product->id, [
             'name' => __('validation.required', ['attribute' => 'name']),
             'price' => __('validation.required', ['attribute' => 'price']),
             'amount' => __('validation.required', ['attribute' => 'amount']),
@@ -62,7 +62,7 @@ class InventoryRequestTest extends TestCaseController
             'name' => __('validation.string', ['attribute' => 'name']),
         ]);
 
-        $this->putJsonValidationErrors($form, $this->inventory->id, [
+        $this->putJsonValidationErrors($form, $this->product->id, [
             'name' => __('validation.string', ['attribute' => 'name']),
         ]);
     }
@@ -83,7 +83,7 @@ class InventoryRequestTest extends TestCaseController
             'name' => __('validation.max.string', ['attribute' => 'name', 'max' => 255]),
         ]);
 
-        $this->putJsonValidationErrors($form, $this->inventory->id, [
+        $this->putJsonValidationErrors($form, $this->product->id, [
             'name' => __('validation.max.string', ['attribute' => 'name', 'max' => 255]),
         ]);
     }
@@ -105,7 +105,7 @@ class InventoryRequestTest extends TestCaseController
             'amount' => __('validation.integer', ['attribute' => 'amount']),
         ]);
 
-        $this->putJsonValidationErrors($form, $this->inventory->id, [
+        $this->putJsonValidationErrors($form, $this->product->id, [
             'price' => __('validation.integer', ['attribute' => 'price']),
             'amount' => __('validation.integer', ['attribute' => 'amount']),
         ]);
@@ -128,7 +128,7 @@ class InventoryRequestTest extends TestCaseController
             'amount' => __('validation.min.numeric', ['attribute' => 'amount', 'min' => 0]),
         ]);
 
-        $this->putJsonValidationErrors($form, $this->inventory->id, [
+        $this->putJsonValidationErrors($form, $this->product->id, [
             'price' => __('validation.min.numeric', ['attribute' => 'price', 'min' => 0]),
             'amount' => __('validation.min.numeric', ['attribute' => 'amount', 'min' => 0]),
         ]);
@@ -151,7 +151,7 @@ class InventoryRequestTest extends TestCaseController
             'amount' => __('validation.max.numeric', ['attribute' => 'amount', 'max' => '100000000']),
         ]);
 
-        $this->putJsonValidationErrors($form, $this->inventory->id, [
+        $this->putJsonValidationErrors($form, $this->product->id, [
             'price' => __('validation.max.numeric', ['attribute' => 'price', 'max' => '100000000']),
             'amount' => __('validation.max.numeric', ['attribute' => 'amount', 'max' => '100000000']),
         ]);
@@ -172,7 +172,7 @@ class InventoryRequestTest extends TestCaseController
             'unit' => __('validation.in', ['attribute' => 'unit']),
         ]);
 
-        $this->putJsonValidationErrors($form, $this->inventory->id, [
+        $this->putJsonValidationErrors($form, $this->product->id, [
             'unit' => __('validation.in', ['attribute' => 'unit']),
         ]);
     }

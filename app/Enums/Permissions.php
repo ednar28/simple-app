@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum Permissions: string
 {
-    case MANAGE_INVENTORY = 'manage inventory';
+    case MANAGE_PRODUCT = 'manage product';
 
     /**
      * Get all order status payment
